@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Comparison </title>
+</head>
+<style>
+table, td, th {
+  border: 1px solid black;
+  padding: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+tr:nth-child(even){background-color: #f2f2f2;}
+tr:nth-child(odd){background-color: #c1c1c1;}
+tr:hover {background-color:yellow;}
+th
+{
+	background-color: #d7bde2 ;
+}
+
+</style>
+<body  style="background-color:#d5f5e3 ">
+<h2 style="text-align: center;color:#873600;font-size:200%">TCP V/s UDP V/s SCTP</h2>
+
+<table style="margin: 20px;font-size:20px;margin-right: 20px;">
+  <tr>
+    <th> </th>
+    <th>TCP</th>
+    <th>UDP</th>
+    <th>SCTP</th>
+  </tr>
+  <tr>
+    <td>Reliability</td>
+    <td>TrustWorthly</td>
+    <td>Unreliable</td>
+    <td>TrustWorthly</td>
+  </tr>
+  <tr>
+    <td>Connection-Type</td>
+    <td>Connection-oriented</td>
+    <td>Connecrionless</td>
+    <td>Connection-oriented</td>
+  </tr>
+  <tr>
+    <td>Transmission-Type</td>
+    <td>Byte-oriented</td>
+    <td>News-oriented</td>
+    <td>News-oriented</td>
+  </tr>
+  <tr>
+    <td>Transmission-Sequence</td>
+    <td>Strictly Ordered</td>
+    <td>Unordered</td>
+    <td>Partially-Ordered</td>
+  </tr>
+  <tr>
+    <td>Over-Load Control</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Error-tolerance</td>
+    <td>No</td>
+    <td>No</td>
+    <td>Yes</td>
+  </tr>
+
+</table>
+
+</body>
+</html>

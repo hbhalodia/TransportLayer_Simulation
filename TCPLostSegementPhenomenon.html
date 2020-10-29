@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lost Segment TCP</title>
+	<style type="text/css">
+		.column{
+			float: left;
+  			width: 20%;
+  			padding: 2px;
+  			margin-left: 10%
+		}
+		.row::after {
+	  		content: "";
+	  		clear: both;
+	  		display: inline-block;
+		}
+	</style>
+	<script type="text/javascript">
+			function info()
+		{
+			alert("The TCP reciver delivers only ordered data to the process.");
+		}	
+		function load(){
+			localStorage.clickcount=0;
+
+		}
+		function createBoundary()
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			
+			/*This Block of Code is For Vertical Line one */
+			context_data.beginPath();
+			context_data.moveTo(350, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,980);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/*This Block of code is For Vertical Line right side */
+          	context_data.beginPath();
+			context_data.moveTo(1000, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,980);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/* Block Of Code is Used For the Content Writing */
+
+          	context_data.font = "25px Arial";
+          	context_data.fillText("Time", 330, 1000);
+          	context_data.fillText("Time", 980, 1000);
+		}
+		function myMove(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(rectX);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos >= parseInt(end)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = "3";
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/3)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos+=10;
+	        	}
+	        }
+		}
+		function myMoveRev(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(end);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos <= parseInt(rectX)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = 3;
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/3)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos-=10;
+	        	}
+	        }
+		}
+		function startLostSegmentPhenomenon()
+		{
+
+			if(typeof(Storage) !== "undefined") 
+        	{
+	            if (localStorage.clickcount) 
+	            {
+	                localStorage.clickcount = Number(localStorage.clickcount)+1;
+	            }
+	            else 
+	            {
+	                localStorage.clickcount = 1;
+	            }
+            
+       		}
+       		
+       		var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			context_data.clearRect(0, 0, can_Id.width.value, can_Id.height.value);
+			createBoundary();
+
+			/*to Make the Horizontal Line*/
+			context_data.beginPath();
+			context_data.moveTo(350, 130); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,130);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	context_data.font = "25px Arial";
+          	context_data.fillText("Reciver Buffer", 1100, 50);
+
+			myMove(360,65,200,50,800,630,"seq:501-600|ack:X","blue");
+
+			setTimeout(() => {  
+
+			
+
+
+			context_data.beginPath();
+			context_data.moveTo(350, 250); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,250);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+          
+          	myMove(360,185,200,50,800,630,"seq:601-700|ack:X","blue");
+
+          	}, 1000);
+
+          	
+
+			/*to Make the Horizontal Line*/
+
+          	setTimeout(() => { 
+
+          	context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1050,100,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.strokeStyle="green";
+    		context_data.rect(1040,90,200,50);
+	        context_data.stroke();
+          	
+
+
+           	context_data.beginPath();
+			context_data.moveTo(1000, 370); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,370);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+          	myMoveRev(355,305,200,50,790,640,"ACK:701","blue");
+
+         	}, 5000);
+
+          	setTimeout(() => { 
+          	context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1050,200,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1100,200,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.strokeStyle="green";
+    		context_data.rect(1040,190,200,50);
+	        context_data.stroke();
+
+          	context_data.beginPath();
+			context_data.moveTo(350, 490); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,490);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMove(360,425,200,50,550,500,"seq:701-800|ack:X","blue");
+
+          	context_data.font = "15px Arial";
+          	context_data.fillText("Lost", 700, 420);
+
+          	}, 10000);
+          	
+          	setTimeout(() => { 
+
+          	
+
+          	context_data.beginPath();
+			context_data.moveTo(350, 610); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,610);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMove(360,545,200,50,800,630,"seq:801-900|ack:X","blue");
+
+
+          	}, 11000);
+
+          	setTimeout(() => { 
+           	context_data.beginPath();
+			context_data.moveTo(1000, 730); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,730);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMoveRev(355,665,200,50,790,640,"ACK:701","blue");
+
+         	}, 16000);
+
+
+          	setTimeout(() => { 
+
+          	context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1050,560,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1100,560,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1200,560,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.strokeStyle="green";
+    		context_data.rect(1040,550,200,50);
+	        context_data.stroke();
+
+
+          	context_data.font = "15px Arial";
+          	context_data.fillText("Resend", 700, 770);
+
+          	context_data.beginPath();
+			context_data.moveTo(300, 610); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(300,850);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	context_data.beginPath();
+			context_data.moveTo(300, 610); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(340,610);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	context_data.beginPath();
+			context_data.moveTo(300, 850); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(340,850);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	context_data.font = "20px Arial";
+          	context_data.fillText("Time Out", 200, 730);
+
+
+          	
+
+          	context_data.beginPath();
+			context_data.moveTo(1000, 850); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,850);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMove(360,785,200,50,800,630,"seq:701-800|ack:X","blue");
+
+
+          	}, 21000);
+          	
+
+          	setTimeout(() => { 
+
+          	context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1050,800,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1100,800,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1150,800,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.fillStyle="red";
+    		context_data.fillRect(1200,800,30,30);
+	        context_data.stroke();
+
+	        context_data.beginPath();
+    		context_data.lineWidth = 3;
+    		context_data.strokeStyle="green";
+    		context_data.rect(1040,790,200,50);
+	        context_data.stroke();
+
+           	context_data.beginPath();
+			context_data.moveTo(1000, 970); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,970);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMoveRev(355,905,200,50,790,640,"ACK:901","blue");
+
+         	}, 26000);
+
+          	setTimeout(() => { 
+          		location.reload();
+          	},40000);
+          	
+		}
+
+
+	</script>
+</head>
+<body onload="load();"  style="background-color:#d5f5e3 ">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<h1 style="text-align: center">Lost Segment Phenomenon TCP</h1>
+		<button onclick="info();" style="float: right;margin-right: 50px;font-size:20px;color:white;background:#873600">Information </button>
+	<div class="row">
+		<div class="column">
+			<p style="margin-left: 150px;">Client</p>
+			<img src="client.png" style="margin-left: 150px;" alt="client" height="125px;">
+		</div>
+
+		<div class="column" style="margin-left: 500px;">
+			<p >Server</p>
+			<img src="server.png" alt="server" height="125px">
+		</div>
+	</div>
+	<input type="button" name="startconnection" value="LostSegemnt" onclick="startLostSegmentPhenomenon();" style="margin-left: 550px;font-size: 30px;margin-right: auto;justify-content: center;color:white;background:#dc7633;font-family: unset;">
+	<canvas id="Vertical" width="1500" height="1000">
+	</canvas><br><br>
+	
+
+</body>
+</html>

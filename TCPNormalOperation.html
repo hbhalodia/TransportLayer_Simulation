@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Normal Operation TCP</title>
+	<style type="text/css">
+		.column{
+			float: left;
+  			width: 20%;
+  			padding: 2px;
+  			margin-left: 10%
+		}
+		.row::after {
+	  		content: "";
+	  		clear: both;
+	  		display: inline-block;
+		}
+	</style>
+	<script type="text/javascript">
+		function info()
+		{
+			alert("In this scenario sender will wait for some pre-defined delay after ACK so that any segments will not miss arrival.");
+		}		
+		function load(){
+			localStorage.clickcount=0;
+
+		}
+		function createBoundary()
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			
+			/*This Block of Code is For Vertical Line one */
+			context_data.beginPath();
+			context_data.moveTo(350, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,700);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/*This Block of code is For Vertical Line right side */
+          	context_data.beginPath();
+			context_data.moveTo(1000, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,700);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/* Block Of Code is Used For the Content Writing */
+
+          	context_data.font = "25px Arial";
+          	context_data.fillText("Time", 330, 720);
+          	context_data.fillText("Time", 980, 720);
+		}
+		function myMove(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(rectX);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos >= parseInt(end)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = "3";
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/5)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos+=10;
+	        	}
+	        }
+		}
+		function myMoveRev(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(end);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos <= parseInt(rectX)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = 3;
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/5)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos-=10;
+	        	}
+	        }
+		}
+		function startNormalOperation()
+		{
+
+			if(typeof(Storage) !== "undefined") 
+        	{
+	            if (localStorage.clickcount) 
+	            {
+	                localStorage.clickcount = Number(localStorage.clickcount)+1;
+	            }
+	            else 
+	            {
+	                localStorage.clickcount = 1;
+	            }
+            
+       		}
+       		
+       		var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			context_data.clearRect(0, 0, can_Id.width.value, can_Id.height.value);
+			createBoundary();
+
+			/*to Make the Horizontal Line*/
+			context_data.beginPath();
+			context_data.moveTo(350, 130); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,130);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+
+			myMove(360,65,250,50,750,630,"seq:1201-1400|ack:4001","blue");
+
+			setTimeout(() => {  context_data.beginPath();
+			context_data.moveTo(1000, 250); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,250);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+          
+          	myMoveRev(355,185,250,50,740,640,"seq:4001-5000|ack:1401","blue");
+
+          	}, 5000);
+
+          	
+
+			/*to Make the Horizontal Line*/
+
+          	setTimeout(() => { 
+          	
+          	context_data.beginPath();
+			context_data.moveTo(330, 250); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(330,370);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	context_data.font = "15px Arial";
+          	context_data.fillText("500ms", 250, 300);
+
+          	context_data.beginPath();
+			context_data.moveTo(350, 370); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,370);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMove(360,305,200,50,800,630,"ACK:5001","blue");
+
+         	}, 10000);
+
+          	setTimeout(() => { context_data.beginPath();
+			context_data.moveTo(1000, 490); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,490);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMoveRev(355,425,250,50,740,640,"seq:5001-6000|ack:1401","blue");
+
+          	}, 15000);
+
+          	setTimeout(() => {
+          	context_data.beginPath();
+			context_data.moveTo(330, 490); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(330,570);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	context_data.font = "15px Arial";
+          	context_data.fillText("<500ms", 250, 530);
+
+          	context_data.beginPath();
+			context_data.moveTo(1000, 570); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,570);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMoveRev(355,505,250,50,740,640,"seq:6001-7000|ack:1401","blue");
+
+          	}, 16000);
+
+          	setTimeout(() => { 
+          	
+          	context_data.beginPath();
+			context_data.moveTo(350, 680); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,680);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMove(360,610,200,50,800,630,"ACK:7001","blue");
+
+         	}, 23000);
+
+          	setTimeout(() => { 
+          		location.reload();
+          	},35000);
+          	
+		}
+
+
+	</script>
+</head>
+<body onload="load();"  style="background-color:#d5f5e3 ">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<h1 style="text-align: center">Normal Operation TCP</h1>
+		<button onclick="info();" style="float: right;margin-right: 50px;font-size:20px;color:white;background:#873600">Information </button>
+	<div class="row">
+		<div class="column">
+			<p style="margin-left: 150px;">Client</p>
+			<img src="client.png" style="margin-left: 150px;" alt="client" height="125px;">
+		</div>
+
+		<div class="column" style="margin-left: 500px;">
+			<p >Server</p>
+			<img src="server.png" alt="server" height="125px">
+		</div>
+	</div>
+	<input type="button" name="startconnection" value="NormalOperation" onclick="startNormalOperation();" style="margin-left: 550px;font-size: 30px;margin-right: auto;justify-content: center;color:white;background:#dc7633;font-family: unset;">
+	<canvas id="Vertical" width="1500" height="800">
+	</canvas><br><br>
+	
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Main File Connection TCP</title>
+	<style type="text/css">
+		.column{
+			float: left;
+  			width: 20%;
+  			padding: 2px;
+  			margin-left: 10%
+		}
+		.row::after {
+	  		content: "";
+	  		clear: both;
+	  		display: inline-block;
+		}
+	</style>
+	<script type="text/javascript">
+		function info()
+		{
+			alert("SCTPC does not allow half-close situation. if one end close the association then ,the other end must stop sending of data.");
+		}		
+		function load(){
+			localStorage.clickcount=0;
+
+		}
+		function createBoundary()
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			
+			/*This Block of Code is For Vertical Line one */
+			context_data.beginPath();
+			context_data.moveTo(400, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(400,130);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/*This Block of code is For Vertical Line right side */
+          	context_data.beginPath();
+			context_data.moveTo(1230, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1230,130);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/* Block Of Code is Used For the Content Writing */
+          	context_data.font = "15px Arial";
+          
+          	
+
+          	context_data.font = "25px Arial";
+          	context_data.fillText("Sender", 360, 230);
+          	context_data.fillText("Reciever", 1190, 230);
+		}
+		function myMove(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(rectX);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos >= parseInt(end)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = "3";
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/4)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos+=10;
+	        	}
+	        }
+		}
+		function myMoveRev(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(end);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos <= parseInt(rectX)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = 3;
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/4)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos-=10;
+	        	}
+	        }
+		}
+		function startConnection()
+		{
+			if(typeof(Storage) !== "undefined") 
+        	{
+	            if (localStorage.clickcount) 
+	            {
+	                localStorage.clickcount = Number(localStorage.clickcount)+1;
+	            }
+	            else 
+	            {
+	                localStorage.clickcount = 1;
+	            }
+            
+       		}
+       		createBoundary();
+       		var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+
+			/*to Make the Horizontal Line*/
+			context_data.beginPath();
+			context_data.moveTo(400, 130); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1230,130);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+
+			/* Block Of Code To start Animation From Active Open To right Side */
+			myMove(405,65,200,50,1010,820,"Frame1","blue");
+
+			setTimeout(() => { 
+          	myMove(405,65,200,50,1010,820,"Frame2","red");
+
+         	}, 7000);
+
+			setTimeout(() => { 
+          	myMove(405,65,200,50,1010,820,"Frame3","green");
+
+         	}, 14000);
+
+			setTimeout(() => { 
+          	myMove(405,65,200,50,1010,820,"Frame4","brown");
+
+         	}, 21000);
+
+
+	      
+	    setTimeout(() => { 
+	      		location.reload();
+	    },25000);
+          	
+	}
+
+
+	</script>
+</head>
+<body onload="load();"  style="background-color:#d5f5e3 ">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<h1 style="text-align: center">Connection TCP Using Three Way Handshake</h1>
+		<button onclick="info();" style="float: right;margin-right: 50px;font-size:20px;color:white;background:#873600">Information </button>
+	<div class="row">
+		<div class="column">
+			<img src="tcp1.png" style="margin-left: 80px;" alt="tcp1" height="300px;" width="300px;">
+			
+		</div>
+		<div class="column">
+			<input type="button" name="startconnection" value="Start" onclick="startConnection();" style="margin-left: 100px;font-size: 30px;margin-right: auto;justify-content: center;margin-top:100px;color:white;background:#dc7633;font-family: unset;">
+		</div>
+
+		<div class="column" >
+			<img src="tcp2.png" style="margin-right:150px;" alt="tcp3" height="300px;" width="300px;">
+		</div>
+	</div>
+	
+	<canvas id="Vertical" width="1500" height="300">
+	</canvas><br><br>
+	
+
+</body>
+</html>

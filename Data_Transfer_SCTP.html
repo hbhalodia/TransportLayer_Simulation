@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SCTP Four Way Hand Shake</title>
+	<style type="text/css">
+		.column{
+			float: left;
+  			width: 20%;
+  			padding: 2px;
+  			margin-left: 10%
+		}
+		.row::after {
+	  		content: "";
+	  		clear: both;
+	  		display: inline-block;
+		}
+	</style>
+	<script type="text/javascript">
+		function info()
+		{
+
+			alert("The acknowledgment in SCTP defines the cumulative TSN,the TSN of the last data chunk received in order.");
+		}
+		
+		function load(){
+			localStorage.clickcount=0;
+
+		}
+		function createBoundary()
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			
+			/*This Block of Code is For Vertical Line one */
+			context_data.beginPath();
+			context_data.moveTo(350, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,700);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/*This Block of code is For Vertical Line right side */
+          	context_data.beginPath();
+			context_data.moveTo(1000, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,700);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/* Block Of Code is Used For the Content Writing */
+          	context_data.font = "15px Arial";
+          	
+          	
+
+          	context_data.font = "25px Arial";
+          	context_data.fillText("Time", 330, 720);
+          	context_data.fillText("Time", 980, 720);
+		}
+		function myMove(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(rectX);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos >= parseInt(end)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = "3";
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/4)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos+=10;
+	        	}
+	        }
+		}
+		function myMoveRev(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(end);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos <= parseInt(rectX)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = 3;
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/4)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos-=10;
+	        	}
+	        }
+		}
+		function startConnection()
+		{
+			if(typeof(Storage) !== "undefined") 
+        	{
+	            if (localStorage.clickcount) 
+	            {
+	                localStorage.clickcount = Number(localStorage.clickcount)+1;
+	            }
+	            else 
+	            {
+	                localStorage.clickcount = 1;
+	            }
+            
+       		}
+       		createBoundary();
+       		var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+
+			/*to Make the Horizontal Line*/
+			context_data.beginPath();
+			context_data.moveTo(350, 130); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,130);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+
+			/* Block Of Code To start Animation From Active Open To right Side */
+			myMove(360,75,200,50,800,630,"TSN:7105  Data Chunk","blue");
+
+          	 
+          	myMove(360,138,200,50,800,630,"TSN:7106  Data Chunk","blue");
+          	
+
+          	setTimeout(() => { 
+          	context_data.beginPath();
+			context_data.moveTo(350, 300); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,300);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMove(360,243,200,50,800,630,"TSN:7107 Data Chunk","red");
+          	myMove(360,308,200,50,800,630,"TSN:7108  Data Chunk","red");
+
+        }, 5000);
+
+
+          	setTimeout(() => { 
+          	context_data.beginPath();
+			context_data.moveTo(350, 480); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,480);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMoveRev(360,425,220,50,760,630,"cumTSN:7108 SACK Chunk","blue");
+          	myMoveRev(360,488,220,50,760,630,"TSN:121  Data Chunk","blue");
+
+        }, 10000);
+
+
+          	setTimeout(() => { 
+          	context_data.beginPath();
+			context_data.moveTo(350, 630); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,630);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	myMove(360,575,220,50,760,630,"cumTSN:122 SACK Chunk","red");
+   
+        }, 15000);
+
+
+
+
+
+
+	      
+	    setTimeout(() => { 
+	      		location.reload();
+	    },20000);
+          	
+	}
+
+
+	</script>
+</head>
+<body onload="load();"  style="background-color:#d5f5e3 ">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<h1 style="text-align: center">Connection SCTP Using Four Way Handshake</h1>
+		<button onclick="info();" style="float: right;margin-right: 50px;font-size:20px;color:white;background:#873600">Information </button>
+	<div class="row">
+		<div class="column">
+			<p style="margin-left: 150px;">Client</p>
+			<img src="client.png" style="margin-left: 150px;" alt="client" height="125px;">
+		</div>
+
+		<div class="column" style="margin-left: 500px;">
+			<p >Server</p>
+			<img src="server.png" alt="server" height="125px">
+		</div>
+	</div>
+	<input type="button" name="startconnection" value="ConnectionSetup" onclick="startConnection();" style="margin-left: 550px;font-size: 30px;margin-right: auto;justify-content: center;color:white;background:#dc7633;font-family: unset;">
+	<canvas id="Vertical" width="1500" height="780">
+	</canvas><br><br>
+	
+
+</body>
+</html>

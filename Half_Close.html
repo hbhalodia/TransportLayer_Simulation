@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Main File Data Transfer TCP</title>
+	<style type="text/css">
+		.column{
+			float: left;
+  			width: 20%;
+  			padding: 2px;
+  			margin-left: 10%
+		}
+		.row::after {
+	  		content: "";
+	  		clear: both;
+	  		display: inline-block;
+		}
+	</style>
+	<script type="text/javascript">
+		function info()
+		{
+			alert("In TCP one end can stop sending data while still receiving data.This is called as half-close situation,it is normally intiated by client.");
+		}
+		
+		function load(){
+			localStorage.clickcount=0;
+
+		}
+		function createBoundary()
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			
+			/*This Block of Code is For Vertical Line one */
+			context_data.beginPath();
+			context_data.moveTo(350, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,750);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/*This Block of code is For Vertical Line right side */
+          	context_data.beginPath();
+			context_data.moveTo(1000, 0); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,750);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+          	/* Block Of Code is Used For the Content Writing */
+
+          	context_data.font = "25px Arial";
+          	context_data.fillText("Time", 330, 770);
+          	context_data.fillText("Time", 980, 770);
+		}
+		function myMove(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(rectX);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos >= parseInt(end)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = "3";
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/5)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos+=10;
+	        	}
+	        }
+		}
+		function myMoveRev(rectX,rectY,rectWidth,rectHeight,end,clearWidth,txt,color)
+		{
+			var can_Id = document.getElementById("Vertical");
+			var context_rect = can_Id.getContext("2d");
+
+			var count =0;
+			var speed = 100;
+
+			var x_pos = parseInt(end);
+			var y_pos = parseInt(rectY);
+
+			var id = setInterval(frame, speed);
+	        
+	        function frame() 
+	        {
+	        	if (x_pos <= parseInt(rectX)) 
+	        	{
+	          		clearInterval(id);
+	        	} 
+	        	else 
+	        	{
+	        		context_rect.clearRect(rectX-3, rectY-3, clearWidth ,rectHeight+7);
+	        		context_rect.beginPath();
+	        		context_rect.lineWidth = 3;
+	        		context_rect.strokeStyle = color;
+	        		context_rect.moveTo(x_pos,rectY);
+	        		context_rect.rect(x_pos,rectY,rectWidth,rectHeight);
+			        context_rect.stroke();
+			        context_rect.font = "15px Arial";
+            		context_rect.fillText(txt,parseInt(x_pos-20 +(parseInt(rectWidth-30)/5)), parseInt(rectY+(parseInt(rectHeight+7)/2)));
+			        x_pos-=10;
+	        	}
+	        }
+		}
+		function startHalfClose	()
+		{
+
+			if(typeof(Storage) !== "undefined") 
+        	{
+	            if (localStorage.clickcount) 
+	            {
+	                localStorage.clickcount = Number(localStorage.clickcount)+1;
+	            }
+	            else 
+	            {
+	                localStorage.clickcount = 1;
+	            }
+            
+       		}
+       		
+       		var can_Id = document.getElementById("Vertical");
+			var context_data = can_Id.getContext("2d");
+			context_data.clearRect(0, 0, can_Id.width.value, can_Id.height.value);
+			createBoundary();
+
+			/*to Make the Horizontal Line*/
+			context_data.beginPath();
+			context_data.moveTo(350, 130); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,130);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+
+
+			myMove(360,65,250,50,750,630,"seq:x|ack:y|A_F|FIN","blue");
+
+			setTimeout(() => {  context_data.beginPath();
+			context_data.moveTo(1000, 250); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,250);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+          
+          	myMoveRev(360,185,250,50,740,640,"seq:y-1|ack:x+1|A|ACK","blue");
+
+          	}, 5000);
+
+			/*to Make the Horizontal Line*/
+
+          	setTimeout(() => { 
+          	myMoveRev(360,305,250,50,740,640,"Data Segments From Ser. To Cli.","blue");
+
+         	}, 10000);
+
+          	setTimeout(() => { 
+          	myMove(360,425,250,50,750,630,"Ack From Client To Server","blue");
+
+          	}, 15000);
+
+          	setTimeout(() => {  context_data.beginPath();
+			context_data.moveTo(1000, 610); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(350,610);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+          
+          	myMoveRev(360,545,250,50,740,640,"seq:z|ack:x+1|A_F|FIN","blue");
+
+          	}, 20000);
+
+          	setTimeout(() => {  context_data.beginPath();
+			context_data.moveTo(350, 730); 
+          	context_data.strokeStyle = 'purple';
+          	context_data.lineTo(1000,730);
+         	context_data.lineWidth = 4; 
+          	context_data.stroke();
+          
+          	myMove(360,665,250,50,750,630,"seq:x|ack:z+1|A|ACK","blue");
+
+          	}, 25000);
+
+          	setTimeout(() => { 
+          		location.reload();
+          	},40000);
+          	
+		}
+
+
+	</script>
+</head>
+<body onload="load();"  style="background-color:#d5f5e3 ">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<h1 style="text-align: center">Half-Close Phase in TCP</h1>
+		<button onclick="info();" style="float: right;margin-right: 50px;font-size:20px;color:white;background:#873600">Information </button>
+	<div class="row">
+		<div class="column">
+			<p style="margin-left: 150px;">Client</p>
+			<img src="client.png" style="margin-left: 150px;" alt="client" height="125px;">
+		</div>
+
+		<div class="column" style="margin-left: 500px;">
+			<p >Server</p>
+			<img src="server.png" alt="server" height="125px">
+		</div>
+	</div>
+	<input type="button" name="startconnection" value="Half-Close" onclick="startHalfClose();" style="margin-left: 550px;font-size: 30px;margin-right: auto;justify-content: center;color:white;background:#dc7633;font-family: unset;">
+	<canvas id="Vertical" width="1500" height="800">
+	</canvas><br><br>
+	
+
+</body>
+</html>
